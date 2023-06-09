@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        hr {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: none;
+            border-top: 1px solid #ccc;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .button-wrapper {
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #428bca;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3071a9;
+        }
+
+        .post {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .post-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .post-content {
+            margin-bottom: 10px;
+        }
+
+        .post-votes {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .post-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .vote-button {
+            padding: 5px 10px;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .vote-button:hover {
+            background-color: #eaeaea;
+        }
+
+        .logout-button {
+            padding: 5px 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Modified Upvote Button Style */
+        .upvote-button {
+            padding: 5px 10px;
+            background-color: #00c853; /* New background color for upvote button */
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .upvote-button:hover {
+            background-color: #00b248; /* New background color for upvote button on hover */
+        }
+
+        /* Modified Downvote Button Style */
+        .downvote-button {
+            padding: 5px 10px;
+            background-color: #ff1744; /* New background color for downvote button */
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .downvote-button:hover {
+            background-color: #d50000; /* New background color for downvote button on hover */
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            button {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ user.email }}</h1>
+        <hr>
+        <h2>Create a New Post</h2>
+        <form method="POST" action="/dashboard">
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div>
+                <label for="content">Content:</label>
+                <textarea id="content" name="content" required></textarea>
+            </div>
+            <div class="button-wrapper">
+                <button type="submit">Create Post</button>
+            </div>
+        </form>
+        <hr>
+        <h2>Posts</h2>
+        {% for post in posts %}
+            <div class="post">
+                <div class="post-title">{{ post.title }}</div>
+                <div class="post-content">{{ post.content }}</div>
+                <div class="post-votes">
+                    Votes: {{ post.upvotes - post.downvotes }}
+                </div>
+                <div class="post-buttons">
+                    <form method="POST" action="/post/{{ post.id }}/upvote">
+                        <button class="upvote-button" type="submit">Upvote</button>
+                    </form>
+                    <form method="POST" action="/post/{{ post.id }}/downvote">
+                        <button class="downvote-button" type="submit">Downvote</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+        <hr>
+        <form method="GET" action="/logout">
+            <button class="logout-button" type="submit">Logout</button>
+        </form>
+    </div>
+</body>
+</html>
