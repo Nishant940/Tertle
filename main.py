@@ -62,6 +62,11 @@ class Vote(db.Model):
 
 
 @app.route('/')
+def index():
+    return render_template('home.html')
+
+
+@app.route('/login')
 def login():
     return redirect(REQ_URI)
 
@@ -88,6 +93,8 @@ def home():
 
     with app.app_context():
         user = User.query.filter_by(email=info['email']).first()
+        print("User Response: ")
+        print(info)
         if not user:
             user = User(email=info['email'])
             db.session.add(user)
@@ -125,7 +132,6 @@ def upvote(post_id):
 
     user_id = session['user_id']
     post = Post.query.get(post_id)
-    user = User.query.get(user_id)
 
     # Check if the user has already upvoted the post
     existing_vote = Vote.query.filter_by(post_id=post_id, user_id=user_id).first()
